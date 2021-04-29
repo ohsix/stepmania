@@ -327,6 +327,42 @@ static bool ExecHasValidCodeSignature( void )
 	return status == errSecSuccess;
 }
 
+static bool ExecIsSandboxed( void )
+{
+	bool isSandboxed = false;
+	SecStaticCodeRef staticCode = nullptr;
+	SecRequirementRef sandboxRequirement = nullptr;
+	NSURL *bundleURL = [[NSBundle mainBundle] bundleURL];
+	OSStatus err;
+
+	err = SecStaticCodeCreateWithPath( (__bridge CFURLRef)bundleURL, kSecCSDefaultFlags, &staticCode );
+	if( err != errSecSuccess ) {
+		fprintf( stderr, "Failed to load entitlement data for sandbox check. (%d)", err );
+		return false;
+	}
+
+	err = SecStaticCodeCheckValidityWithErrors( staticCode, kSecCSBasicValidateOnly, nullptr, nullptr );
+	if( err != errSecSuccess ) {
+		fprintf( stderr, "Code validation failed for sandbox check. (%d)", err );
+		CFRelease( staticCode );
+		return false;
+	}
+
+	err = SecRequirementCreateWithString( CFSTR("entitlement[\"com.apple.security.app-sandbox\"] exists"), kSecCSDefaultFlags, &sandboxRequirement );
+	if( err != errSecSuccess ) {
+		fprintf( stderr, "Failed to load security requirement for sandbox check. (%d)", err);
+		CFRelease( staticCode );
+		return false;
+	}
+	
+	err = SecStaticCodeCheckValidityWithErrors( staticCode, kSecCSBasicValidateOnly, sandboxRequirement, nullptr );
+	isSandboxed = ( err == errSecSuccess );
+
+	CFRelease( staticCode );
+	CFRelease( sandboxRequirement );
+	return isSandboxed;
+}
+
 static NSURL* SecurityScopedUserFilesystemURL( void )
 {
 	if( !g_UFURLCached ) {
@@ -430,11 +466,13 @@ static bool PathForUserFiles( char dir[PATH_MAX] )
 	NSURL* url = SecurityScopedUserFilesystemURL();
 	
 	if( !url ) {
-		// Ask the user where to store/load user data.
-		url = PromptForUserFilesystemURL();
-		
-		if( url ) {
-			SaveSecurityScopedUserFilesystemURL( url );
+		// Ask the user where to store/load user data if the process is running sandboxed.
+		if( ExecIsSandboxed() ) {
+			url = PromptForUserFilesystemURL();
+			
+			if( url ) {
+				SaveSecurityScopedUserFilesystemURL( url );
+			}
 		}
 	}
 	
