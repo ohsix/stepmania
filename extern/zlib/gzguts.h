@@ -27,8 +27,11 @@
 #endif
 #include <fcntl.h>
 #include <sys/types.h>
+
+#ifndef _MSC_VER
 #include <sys/uio.h>
 #include <unistd.h>
+#endif
 
 #ifdef NO_DEFLATE       /* for compatibility with old definition */
 #  define NO_GZCOMPRESS
