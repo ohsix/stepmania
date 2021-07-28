@@ -46,7 +46,8 @@
 // JACK gives us an explicit option to NOT start a daemon, so try it third,
 // as PulseAudio will successfully Init() but not actually work if the
 // PulseAudio daemon has been suspended by/for jackd.
-#define DEFAULT_SOUND_DRIVER_LIST "ALSA-sw,OSS,JACK,Pulse,Null"
+//#define DEFAULT_SOUND_DRIVER_LIST "ALSA-sw,OSS,JACK,Pulse,Null"
+#define DEFAULT_SOUND_DRIVER_LIST "SDL2,Null"
 #else
 #error Which arch?
 #endif
