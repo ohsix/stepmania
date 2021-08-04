@@ -32,7 +32,7 @@ static void dumpAudioSpec(SDL_AudioSpec* s)
 	SDL_LogVerbose(SDL_LOG_CATEGORY_APPLICATION, "size:\t%d\n", s->size);
 }
 
-std::string RageSoundDriver_SDL2::Init()
+RString RageSoundDriver_SDL2::Init()
 {
 	HERE;
 	
