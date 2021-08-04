@@ -39,7 +39,7 @@ std::string RageSoundDriver_SDL2::Init()
 	if(SDL_Init(SDL_INIT_AUDIO) < 0)
 	{
 		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, US "audio init failed: %s\n", SDL_GetError());
-		return std::string(SDL_GetError());
+		return SDL_GetError();
 	}
 
 	SDL_AudioSpec have;
@@ -49,7 +49,7 @@ std::string RageSoundDriver_SDL2::Init()
 	if(dev == 0)
 	{
 		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, US "OpenAudioDevice failed: %s\n", SDL_GetError());
-		return std::string(SDL_GetError());
+		return SDL_GetError();
 	}
 
 #if defined(HEHE)
@@ -65,7 +65,7 @@ std::string RageSoundDriver_SDL2::Init()
 
 	SDL_PauseAudioDevice(dev, 0);
 
-	return std::string();
+	return RString();
 }
 
 RageSoundDriver_SDL2::RageSoundDriver_SDL2()

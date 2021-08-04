@@ -9,7 +9,7 @@
 class RageSoundDriver_SDL2: public RageSoundDriver
 {
 public:
-	std::string Init();
+	RString Init();
 	RageSoundDriver_SDL2();
 	~RageSoundDriver_SDL2();
 
