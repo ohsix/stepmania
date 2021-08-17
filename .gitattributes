@@ -1,0 +1,9 @@
+# set line ending behavior for people without core.autocrlf set
+* text=auto
+
+# setting eol options per file type if needed
+# *.sln text eol=crlf
+
+# add binary files as needed if git gets it wrong
+# *.png
+
