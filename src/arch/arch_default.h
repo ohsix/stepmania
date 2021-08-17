@@ -24,7 +24,14 @@
 
 #elif defined(UNIX)
 #include "ArchHooks/ArchHooks_Unix.h"
+
+/* here now for expediency, refactoring it as top level for all platforms is a lot of work */
+
+#if defined(HAVE_SDL)
+#include "LowLevelWindow/LowLevelWindow_SDL2.h"
+#else
 #include "LowLevelWindow/LowLevelWindow_X11.h"
+#endif
 
 #if defined(LINUX)
 #include "MemoryCard/MemoryCardDriverThreaded_Linux.h"
