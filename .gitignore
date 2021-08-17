@@ -3,6 +3,13 @@
 *.obj
 *.a
 
+# working copy stuff, gnu global, htags output, build tree
+GPATH
+GRTAGS
+GTAGS
+HTML/
+build/
+
 # CMake Files/Directories
 CMakeFiles/
 CMakeCache.txt
