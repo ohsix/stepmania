@@ -69,7 +69,7 @@ LowLevelWindow_SDL2::~LowLevelWindow_SDL2()
 void *LowLevelWindow_SDL2::GetProcAddress(RString s)
 {
 	HERE;
-	SDL_LogVerbose(SDL_LOG_CATEGORY_APPLICATION, US "::GetProcAddress(\"%s\");\n", s);
+	SDL_LogVerbose(SDL_LOG_CATEGORY_APPLICATION, US "::GetProcAddress(\"%s\");\n", (const char*)s);
 
 	return NULL;
 }
