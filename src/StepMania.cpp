@@ -435,6 +435,10 @@ static void AdjustForChangedSystemCapabilities()
 #include "RageDisplay_OGL.h"
 #endif
 
+#if defined(HAVE_SDL)
+#include "RageDisplay_SDL2.h"
+#endif
+
 #if defined(SUPPORT_GLES2)
 #include "RageDisplay_GLES2.h"
 #endif
@@ -754,7 +758,13 @@ RageDisplay *CreateDisplay()
 		ssprintf(ERROR_VIDEO_DRIVER.GetValue(), GetVideoDriverName().c_str())+"\n\n";
 
 	vector<RString> asRenderers;
-	split( PREFSMAN->m_sVideoRenderers, ",", asRenderers, true );
+
+	RString renderer_override;
+
+	if(GetCommandlineArgument("renderer", &renderer_override))
+		split(renderer_override, ",", asRenderers, true);
+	else
+		split( PREFSMAN->m_sVideoRenderers, ",", asRenderers, true );
 
 	if( asRenderers.empty() )
 		RageException::Throw( "%s", ERROR_NO_VIDEO_RENDERERS.GetValue().c_str() );
@@ -764,7 +774,13 @@ RageDisplay *CreateDisplay()
 	{
 		RString sRenderer = asRenderers[i];
 
-		if( sRenderer.CompareNoCase("opengl")==0 )
+		if( sRenderer.CompareNoCase("sdl") == 0 )
+		{
+			/* right now this can only be done with --renderer sdl */
+			LOG->Info("🐲");
+			pRet = new RageDisplay_SDL2;
+		}
+		else if( sRenderer.CompareNoCase("opengl")==0 )
 		{
 #if defined(SUPPORT_OPENGL)
 			pRet = new RageDisplay_Legacy;
