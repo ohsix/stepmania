@@ -258,6 +258,10 @@ endif()
 
 if(WITH_SDL)
   find_package(SDL2 REQUIRED)
+  find_package(PkgConfig REQUIRED)
+
+  #IMG_SaveJPG was added in 2.0.2, SavePNG was added 2.0.0
+  pkg_check_modules(SDL2_image REQUIRED SDL2_image>=2.0.2)
   set(HAS_SDL TRUE)
 endif()
 
