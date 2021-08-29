@@ -2,10 +2,11 @@
 #include "RageTextureID.h"
 #include "RageTextureManager.h"
 #include "RageUtil.h"
+#include "PrefsManager.h"
 
 void RageTextureID::Init()
 {
-	iMaxSize = 2048;
+	iMaxSize = PREFSMAN->m_iMaxTextureResolution;
 	bMipMaps = false;	// Most sprites (especially text) look worse with mip maps
 	iAlphaBits = 4;
 	iGrayscaleBits = -1;
