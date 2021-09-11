@@ -778,7 +778,12 @@ RageDisplay *CreateDisplay()
 		{
 			/* right now this can only be done with --renderer sdl */
 			LOG->Info("🐲");
+#if defined(HAVE_SDL)
 			pRet = new RageDisplay_SDL2;
+#else
+			LOG->Info("🐲not🐲built🐲with🐲sdl🐲support🐲");
+			return new RageDisplay_Null;
+#endif
 		}
 		else if( sRenderer.CompareNoCase("opengl")==0 )
 		{

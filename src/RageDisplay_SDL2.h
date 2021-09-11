@@ -6,10 +6,12 @@
 #include "RageDisplay.h"
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_opengles2.h>
+#include <SDL2/SDL_image.h>
 
 class RageDisplay_SDL2: public RageDisplay
 {
-public:
+public: /* non-optional and pure virtual methods */
 	RString Init(const VideoModeParams& p, bool bAllowUnacceleratedRenderer) override;
 
 	RageDisplay_SDL2();
@@ -53,7 +55,6 @@ public:
 	void SetLighting(bool) override;
 	void SetLightOff(int index) override;
 	void SetLightDirectional(int index, const RageColor& ambient, const RageColor& diffuse, const RageColor& specular, const RageVector3& direction) override;
-	/* specular *and* shininess? */
 	void SetMaterial(const RageColor& emissive, const RageColor& ambient, const RageColor& diffuse, const RageColor& specular, float shininess) override;
 
 	RageCompiledGeometry* CreateCompiledGeometry() override;
@@ -70,9 +71,14 @@ protected:
 	void DrawCompiledGeometryInternal(const RageCompiledGeometry* p, int iMeshIndex) override;
 	void DrawSymmetricQuadStripInternal(const RageSpriteVertex v[], int iNumVerts) override;
 
-private:
+public: /* non pure virtual, optional methods */
+	bool BeginFrame() override;
+	void EndFrame() override;
+
+private: /* our stuff */
 	SDL_Window* w;
-	VideoModeParams vidMode;
+	SDL_GLContext gl;
+	VideoModeParams activeMode;
 };
 
 #endif
